@@ -20,7 +20,8 @@ class Order(models.Model):
         on_delete=models.CASCADE
     )
     total_amount = models.DecimalField(
-        max_digits=20, decimal_places=2
+        max_digits=20, decimal_places=2,
+        blank=True, null=True
     )
     shipping_address = models.TextField()
     billing_address = models.TextField(blank=True, null=True)
