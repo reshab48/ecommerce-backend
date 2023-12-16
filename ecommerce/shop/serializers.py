@@ -37,9 +37,16 @@ class OrderSerializer(serializers.ModelSerializer):
 
         order = Order.objects.create(user=user, **validated_data)
 
+        total_amount = 0
+
         for item in items_data:
             product = Product.objects.get(id=item.get('product_id'))
-            OrderItem.objects.create(order=order, product=product, quantity=item.get('quantity'))
+            item = OrderItem.objects.create(order=order, product=product, quantity=item.get('quantity'))
+
+            total_amount += item.get_total_amount()
+
+        order.total_amount = total_amount
+        order.save()
 
         return order
 
@@ -56,11 +63,17 @@ class OrderSerializer(serializers.ModelSerializer):
             'billing_address',
             instance.billing_address
         )
-        instance.save()
+
+        total_amount = 0
 
         instance.order_items.all().delete()
         for item in items_data:
             product = Product.objects.get(id=item.get('product_id'))
-            OrderItem.objects.create(order=instance, product=product, quantity=item.get('quantity'))
+            item = OrderItem.objects.create(order=instance, product=product, quantity=item.get('quantity'))
+
+            total_amount += item.get_total_amount()
+
+        instance.total_amount = total_amount
+        instance.save()
 
         return instance
