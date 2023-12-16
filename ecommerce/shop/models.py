@@ -23,7 +23,7 @@ class Order(models.Model):
         max_digits=20, decimal_places=2
     )
     shipping_address = models.TextField()
-    billing_address = models.TextField()
+    billing_address = models.TextField(blank=True, null=True)
 
     def __str__(self) -> str:
         return f'Order #{self.id}, User: {str(self.user)}'
