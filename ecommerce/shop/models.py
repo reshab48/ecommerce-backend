@@ -16,7 +16,8 @@ class Order(models.Model):
     user = models.ForeignKey(
         User,
         related_name='orders',
-        related_query_name='order'
+        related_query_name='order',
+        on_delete=models.CASCADE
     )
     total_amount = models.DecimalField(
         max_digits=20, decimal_places=2
@@ -32,14 +33,16 @@ class OrderItem(models.Model):
     order = models.ForeignKey(
         Order,
         related_name='order_items',
-        related_query_name='order_item'
+        related_query_name='order_item',
+        on_delete=models.CASCADE
     )
     product = models.ForeignKey(
         Product,
         related_name='order_items',
-        related_query_name='order_item'
+        related_query_name='order_item',
+        on_delete=models.CASCADE
     )
-    quantity = models.IntegerField(min_value=1)
+    quantity = models.IntegerField()
 
     def __str__(self) -> str:
         return f'{str(self.order)}, quantity: {self.quantity}'
