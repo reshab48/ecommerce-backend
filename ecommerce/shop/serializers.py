@@ -58,7 +58,7 @@ class OrderSerializer(serializers.ModelSerializer):
         )
         instance.save()
 
-        instance.order_items.delete()
+        instance.order_items.all().delete()
         for item in items_data:
             product = Product.objects.get(id=item.get('product_id'))
             OrderItem.objects.create(order=instance, product=product, quantity=item.get('quantity'))
